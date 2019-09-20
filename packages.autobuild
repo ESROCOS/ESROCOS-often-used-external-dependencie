@@ -154,10 +154,6 @@ cmake_package 'tools/orogen_metadata' do |pkg|
     pkg.remove_obsolete_installed_file('share', 'typelib', 'ruby', 'metadata_typelib.rb')
 end
 
-cmake_package 'tools/service_discovery' do |pkg|
-    pkg.define "RUBY_EXECUTABLE", Autoproj.config.ruby_executable
-end
-
 cmake_package 'typelib' do |pkg|
     pkg.define 'RUBY_EXECUTABLE', Autoproj::CmdLine.ruby_executable
     pkg.env_set 'TYPELIB_PLUGIN_PATH', File.join(pkg.prefix, 'lib', 'typelib')
