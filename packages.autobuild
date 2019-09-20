@@ -1,13 +1,88 @@
-cmake_package "external/static_opencv" do |pkg|
-  pkg.define("CMAKE_BUILD_TYPE","Release")
-  pkg.define("BUILD_SHARED_LIBS","OFF")
+# This file defines the external packages from ROCK used in ESROCOS.
+# The package definitons are copied from ROCK's package sets for
+# maintenance of the ESROCOS system.
+
+add_packages_to_flavors 'master','stable' => ['orogen', 'rtt', 'utilrb', 'typelib', 'rtt_typelib', 'tools/metaruby']
+
+in_flavor 'master', 'stable' do
+
+    cmake_package 'base/cmake' do |pkg|
+        Autobuild.env_add_path 'CMAKE_PREFIX_PATH', pkg.prefix
+    end
+
+    cmake_package 'base/console_bridge'
+
+    cmake_package 'base/logging'
+
+    cmake_package 'base/types' do |pkg|
+        if package_enabled?('external/sisl')
+            pkg.define 'SISL_PREFIX', package('external/sisl').prefix
+        end
+        pkg.define "RUBY_EXECUTABLE", Autoproj.config.ruby_executable
+    end
+
+    orogen_package 'base/orogen/std'
+
+    orogen_package 'base/orogen/types' do |pkg|
+        pkg.orogen_file = "base.orogen"
+        if package_selected?('external/sisl')
+            pkg.define "SISL_PREFIX", package('external/sisl').prefix
+        end
+        Autoproj.env_set 'ROCK_PREFIX', File.join(pkg.prefix,'share','rock')
+
+        pkg.remove_obsolete_installed_file "share", "typelib", "ruby", "base.rb"
+    end
+
+    cmake_package 'control/kdl' do |pkg|
+        pkg.depends_on 'base/cmake'
+        pkg.with_doc 'docs'
+        pkg.doc_dir = File.join('orocos_kdl', 'doc', 'api', 'html')
+    end
+
+    cmake_package 'control/kdl_parser'
+
+    cmake_package 'control/sdformat'
+
+    cmake_package 'control/urdfdom' do |pkg|
+        pkg.depends_on 'control/urdfdom_headers'
+        pkg.depends_on 'base/console_bridge'
+    end
+
+    cmake_package 'control/urdfdom_headers'
+
+    cmake_package 'external/sisl' do |pkg|
+        pkg.define "BUILD_SHARED_LIBS","ON"
+        pkg.doc_task do
+            pkg.message "copying HTML documentation from %s"
+        end # Nothing to do, SISL ships with the generated documentation
+        pkg.doc_dir = File.join(pkg.srcdir, 'doc', 'html')
+    end
+
+    cmake_package 'gui/osgviz'
+
+    cmake_package 'gui/vizkit3d' do |pkg|
+        if manifest.package_enabled?('rtt', false) # the toolchain is built, add it to the rtt_target
+            pkg.define "OROCOS_TARGET", Autoproj.config.get('rtt_target')
+        end
+        Autoproj.env_add_path 'OSG_FILE_PATH', File.join(pkg.prefix, "share", "vizkit" )
+
+        # Add our prefix to the VIZKIT_PLUGIN_RUBY_PATH. Relevant packages will have
+        # to list the place where they install themselves
+        # TODO the path should be renamed to VIZKIT3D_PLUGIN_PATH
+        Autoproj.env_add_path 'VIZKIT_PLUGIN_RUBY_PATH', File.join(pkg.prefix, 'lib')
+        Autoproj.env_add_path 'VIZKIT_PLUGIN_RUBY_PATH', File.join(pkg.prefix, 'lib', 'vizkit')
+    end
+
+    cmake_package 'tools/orogen_metadata' do |pkg|
+        Autoproj.env_add_path 'OROGEN_PLUGIN_PATH', File.join(pkg.prefix, 'share', 'orogen', 'plugins')
+        pkg.remove_obsolete_installed_file('share', 'orogen', 'plugins', 'metadata_plugin.rb')
+        pkg.remove_obsolete_installed_file('share', 'typelib', 'ruby', 'metadata_typelib.rb')
+    end
+
+    cmake_package 'tools/service_discovery' do |pkg|
+        pkg.define "RUBY_EXECUTABLE", Autoproj.config.ruby_executable
+    end
+
 end
 
-cmake_package "external/opencv2-4-13" do |pkg|
-  pkg.define("CMAKE_BUILD_TYPE","Release")
-  pkg.define("ENABLE_PRECOMPILED_HEADERS","OFF")
-end
 
-cmake_package 'external/aruco1.3.0' do |pkg|
-        pkg.depends_on 'opencv'
-end
