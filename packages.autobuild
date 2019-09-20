@@ -142,6 +142,11 @@ cmake_package 'rtt_typelib'
 move_package 'rtt_typelib', 'tools'
 
 ruby_package 'tools/metaruby'
+# For ROS compatibility, ROS does not like paths in package names
+metapackage 'metaruby', 'tools/metaruby'
+# The Autoproj API does not allow to put a package higher in the hierarchy, only
+# lower. Trick it.
+Autoproj.manifest.moved_packages['tools/metaruby'] = 'metaruby'
 
 cmake_package 'tools/orogen_metadata' do |pkg|
     Autoproj.env_add_path 'OROGEN_PLUGIN_PATH', File.join(pkg.prefix, 'share', 'orogen', 'plugins')
