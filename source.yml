@@ -32,7 +32,7 @@ version_control:
   branch: master
 
 - base/types:
-  github: rock-core/base-types
+  gmvgit: OBA/MOSAR/ESROCOS/base-types
   branch: master
 
 - base/orogen/std:
@@ -44,8 +44,12 @@ version_control:
   branch: master
 
 - control/kdl:
-  github: orocos/orocos_kinematics_dynamics
+  type: git
+  github: orocos/orocos_kinematics_dynamics.git
   branch: master
+  patches:
+   - $AUTOPROJ_SOURCE_DIR/patches/orocos_kdl.patch
+   - [$AUTOPROJ_SOURCE_DIR/patches/orocos_kdl_eigen_v2.patch, 1]
 
 - control/kdl_parser:
   github: rock-control/control-kdl_parser
