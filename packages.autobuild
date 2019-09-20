@@ -28,6 +28,7 @@ import_package 'base/templates/cmake_lib' do |pkg|
 end
 
 cmake_package 'base/types' do |pkg|
+    pkg.depends_on 'rice'
     if package_enabled?('external/sisl')
         pkg.define 'SISL_PREFIX', package('external/sisl').prefix
     end

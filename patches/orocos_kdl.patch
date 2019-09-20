@@ -1,0 +1,8 @@
+--- CMakeLists.txt (revision 0)
++++ CMakeLists.txt (revision 0)
+@@ -0,0 +1,5 @@
++cmake_minimum_required(VERSION 2.4.6)
++find_package(Rock)
++set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${ROCK_CMAKE_MACROS}/cmake")
++rock_init(kdl 0.1)
++add_subdirectory(orocos_kdl)

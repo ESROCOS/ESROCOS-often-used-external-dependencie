@@ -96,6 +96,14 @@ rake:
     default:
         gem
 
+rice:
+    default:
+        gem: rice
+        # Note: autoconf is an osdep built-in autoproj
+        osdep:
+        - autotools
+        - ruby-dev
+
 ruby:
     debian,ubuntu,gentoo,fedora,arch,manjarolinux,opensuse,darwin: ignore
 
