@@ -27,6 +27,10 @@ version_control:
   github: rock-core/base-logging
   branch: master
 
+- base/templates/cmake_lib:
+  github: rock-core/base-templates-cmake_lib
+  branch: master
+
 - base/types:
   github: rock-core/base-types
   branch: master
@@ -44,7 +48,7 @@ version_control:
   branch: master
 
 - control/kdl_parser:
-  github: rock-control/kdl_parser
+  github: rock-control/control-kdl_parser
   branch: master
 
 - control/sdformat:
@@ -67,6 +71,10 @@ version_control:
 
 - gui/osgviz:
   github: rock-core/gui-osgviz
+  branch: master
+
+- gui/robot_model:
+  gmvgit: OBA/MOSAR/ESROCOS/gui-robot_model
   branch: master
 
 - gui/vizkit3d:

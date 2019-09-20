@@ -1,0 +1,120 @@
+boost:
+    debian: 
+        default: libboost-all-dev
+
+bundler: gem
+
+castxml:
+    ubuntu:
+        '14.04,14.10,15.04,15.10': nonexistent
+        default: castxml
+    debian:
+        default: castxml
+
+eigen3:
+    debian:
+        default: libeigen3-dev
+
+facets:
+    ubuntu: gem
+    debian:
+        squeeze: gem
+        default: ruby-facets
+    fedora: rubygem-facets
+    default:
+        gem: facets
+
+hoe-yard: gem
+
+kramdown: gem
+
+libxml2:
+    debian,ubuntu: libxml2-dev
+    gentoo: dev-libs/libxml2
+    fedora: libxml2-devel
+    arch,manjarolinux: libxml2
+    opensuse: libxml2-devel
+    darwin: libxml2
+
+ncurses:
+    debian: 
+        default: libncurses5-dev
+    ubuntu: 
+        default: libncurses5-dev
+
+omniorb:
+    debian,ubuntu:
+        'squeeze,9.04,9.10,10.04,10.10,11.04':
+            - omniidl4
+            - libomniorb4-dev
+            - omniorb4-nameserver
+        default:
+            - omniidl
+            - libomniorb4-dev
+            - omniorb-nameserver
+    gentoo: net-misc/omniORB
+    fedora: omniORB-devel
+    arch,manjarolinux: ignore
+    opensuse: omniORB-devel
+    macos-brew: omniorb
+    macos-port: omniORB
+
+osg:
+    debian,ubuntu: libopenscenegraph-dev
+    gentoo: dev-games/openscenegraph
+    fedora: OpenSceneGraph-devel
+    macos-brew: open-scene-graph
+    macos-port: OpenSceneGraph
+    arch,manjarolinux: openscenegraph
+    # opensuse: libOpenSceneGraph-devel available in repository Application:/Geo
+
+pkg-config:
+    default: pkg-config
+
+qt4:
+    # QMake is needed for the CMake macro for Qt4
+    debian,ubuntu: [libqt4-dev, qt4-qmake]
+    gentoo:
+        - dev-qt/qtcore
+        - dev-qt/qtgui
+    fedora,opensuse: qt-devel
+    macos-brew: qt4
+    macos-port: qt4-mac
+    arch,manjarolinux: qt4
+
+qt4-opengl:
+    debian,ubuntu: libqt4-opengl-dev
+    gentoo: dev-qt/qtopengl
+    fedora,opensuse: qt-devel
+    macos-brew: qt4
+    macos-port: qt4-mac
+    arch: qt4
+
+rake:
+    debian,ubuntu: rake
+    fedora: rubygem-rake
+    default:
+        gem
+
+ruby:
+    debian,ubuntu,gentoo,fedora,arch,manjarolinux,opensuse,darwin: ignore
+
+ruby-backports:
+    gem: backports
+
+ruby-dev:
+    default: ignore
+
+xpath-perl:
+    ubuntu: libxml-xpath-perl
+    debian: libxml-xpath-perl
+    fedora: perl-XML-XPath
+    gentoo: dev-perl/XML-XPath
+    arch,manjarolinux: perl-xml-xpath
+    opensuse: perl-XML-XPath
+    darwin: ignore
+
+yaml-cpp:
+    debian: libyaml-cpp-dev
+    ubuntu:
+        default: libyaml-cpp-dev
