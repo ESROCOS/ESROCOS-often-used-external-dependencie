@@ -18,35 +18,43 @@ version_control:
 - base/cmake:
   github: rock-core/base-cmake
   branch: master
+  commit: 3c751244fa4050ca54e4c1761d372e8d48560b2b
 
 - base/console_bridge:
   github: rock-core/base-console_bridge
   branch: master
+  commit: c947d8b8b8d755a8ca7161909950cbb1c74b5095
 
 - base/logging:
   github: rock-core/base-logging
   branch: master
+  commit: 48d994e84898776e644a90c5c93ed44a61b47943
 
 - base/templates/cmake_lib:
   github: rock-core/base-templates-cmake_lib
   branch: master
+  commit: a862882d5ca2d38f09f48c56d5be869507c24cfe
 
 - base/types:
   gmvgit: OBA/MOSAR/ESROCOS/base-types
   branch: master
+  #commit: 8f99ad0b6bc5d27d4e29dac9072c0b4f0d8dad63
 
 - base/orogen/std:
   github: rock-core/base-orogen-std
   branch: master
+  commit: ba7de811e440c5512623947af2db5e4d90ae687d
 
 - base/orogen/types:
   github: rock-core/base-orogen-types
   branch: master
+  commit: b0e26b10b8afd74da15ed0edc3ad6910c3ef4165
 
 - control/kdl:
   type: git
   github: orocos/orocos_kinematics_dynamics.git
   branch: master
+  commit: 1ae45bb2e0821586e74047b01f7cb48d913204f4
   patches:
    - $AUTOPROJ_SOURCE_DIR/patches/orocos_kdl.patch
    - [$AUTOPROJ_SOURCE_DIR/patches/orocos_kdl_eigen_v2.patch, 1]
@@ -54,6 +62,7 @@ version_control:
 - control/kdl_parser:
   github: rock-control/control-kdl_parser
   branch: master
+  commit: 514fa1331a6971b3512e17c1db7d30b8dcfc2dff
 
 - control/sdformat:
   type: archive
@@ -64,56 +73,65 @@ version_control:
 - control/urdfdom:
   github: ros/urdfdom
   branch: master
+  commit: 3ffc4eebb22e24bef503849eb43719a7c148e999
 
 - control/urdfdom_headers:
   github: ros/urdfdom_headers
   branch: master
+  commit: 00c1c9c231e46b2300d04073ad696521758fa45c
 
 - external/sisl:
   github: SINTEF-Geometry/SISL
   branch: master
+  commit: f362e79c3cc89fb9de05f1c3e88fabe88699e17b
 
 - gui/osgviz:
   github: rock-core/gui-osgviz
   branch: master
+  commit: 721e38ab2ce3f1f43cbe2d05ef99d7cd4e6ecfb7
 
 - gui/robot_model:
   gmvgit: OBA/MOSAR/ESROCOS/gui-robot_model
   branch: master
+  #commit: 9b0de0e249c252c1f079116217f85078235020cd
 
 - gui/vizkit3d:
   github: rock-core/gui-vizkit3d
   branch: master
+  commit: 405114bdb8f503e8e07515e32c787ebbd09487b6
 
 - orogen:
   github: orocos-toolchain/orogen
   branch: master
+  commit: abaf499be34f81ef232bffc18ad8fd3ab868c63b
 
 - rtt:
   github: orocos-toolchain/rtt
   branch: master
+  commit: 5389930f926d67b91e2eb625b2096b7f92f54b8a
 
 - rtt_typelib:
   github: orocos-toolchain/rtt_typelib
   branch: master
+  commit: c31b360f572b60227457c4e519ab6f48e4659e67
 
 - tools/metaruby:
   github: rock-core/tools-metaruby
   branch: master
+  commit: 2ae16f93bd13cf9aea61890920b632144edc4663
 
 - tools/orogen_metadata:
   github: rock-core/tools-orogen_metadata
   branch: master
-
-- tools/service_discovery:
-  github: rock-core/tools-service_discovery
-  branch: master
+  commit: bc808df068ab17ecb1e4e3a3f97d8d2d29e48b9a
 
 - typelib:
   github: orocos-toolchain/typelib
   branch: master
+  commit: 7263176d431ecc690763ed0d75dc193f1736b047
 
 - utilrb:
   github: orocos-toolchain/utilrb
   branch: master
+  commit: 2f9fe21ef9146571ecada4db189e0181f16361ab
 
