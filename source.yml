@@ -134,4 +134,9 @@ version_control:
   github: orocos-toolchain/utilrb
   branch: master
   commit: 2f9fe21ef9146571ecada4db189e0181f16361ab
+  
+- drivers/controldev:
+  github: rock-drivers/drivers-controldev
+  branch: master
+  commit: ff7002207fbfd19d7fbb1a373d1c2d234076b13a
 

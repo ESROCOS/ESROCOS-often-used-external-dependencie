@@ -183,3 +183,5 @@ move_package 'typelib', 'tools'
 ruby_package 'utilrb'
 move_package 'utilrb', 'tools'
 
+cmake_package 'drivers/controldev'
+
