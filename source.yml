@@ -36,7 +36,7 @@ version_control:
   commit: a862882d5ca2d38f09f48c56d5be869507c24cfe
 
 - base/types:
-  gmvgit: OBA/MOSAR/ESROCOS/base-types
+  gmvgit: PERASPERA/MOSAR/ESROCOS/base-types
   branch: master
   #commit: 8f99ad0b6bc5d27d4e29dac9072c0b4f0d8dad63
 
@@ -91,7 +91,7 @@ version_control:
   commit: 721e38ab2ce3f1f43cbe2d05ef99d7cd4e6ecfb7
 
 - gui/robot_model:
-  gmvgit: OBA/MOSAR/ESROCOS/gui-robot_model
+  gmvgit: PERASPERA/MOSAR/ESROCOS/gui-robot_model
   branch: master
   #commit: 9b0de0e249c252c1f079116217f85078235020cd
 
