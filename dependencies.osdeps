@@ -130,3 +130,6 @@ yaml-cpp:
     debian: libyaml-cpp-dev
     ubuntu:
         default: libyaml-cpp-dev
+        
+rename:
+    debian,ubuntu: rename
