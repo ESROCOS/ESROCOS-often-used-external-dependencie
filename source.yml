@@ -37,7 +37,7 @@ version_control:
 
 - base/types:
   type: archive
-  url: https://gmvdrive.gmv.com/index.php/s/M4FTpEp9maHnfm5
+  url: https://spass-git-ext.gmv.com/PERASPERA/MOSAR/ESROCOS/base-types/-/archive/master/base-types-master.zip
   update_cached_file: true
   archive_dir: base-types-master
   #gmvgit: PERASPERA/MOSAR/ESROCOS/base-types
