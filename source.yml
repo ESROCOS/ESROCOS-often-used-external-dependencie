@@ -38,7 +38,7 @@ version_control:
 - base/types:
   type: archive
   url: https://gmvdrive.gmv.com/index.php/s/M4FTpEp9maHnfm5
-  update_cached_file: false
+  update_cached_file: true
   archive_dir: base-types-master
   #gmvgit: PERASPERA/MOSAR/ESROCOS/base-types
   #branch: master
