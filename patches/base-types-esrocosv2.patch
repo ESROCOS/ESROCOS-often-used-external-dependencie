@@ -1,0 +1,49 @@
+diff --git a/bindings/ruby/lib/sisl/spline.rb b/bindings/ruby/lib/sisl/spline.rb
+index b41e187..a6e761f 100644
+--- a/bindings/ruby/lib/sisl/spline.rb
++++ b/bindings/ruby/lib/sisl/spline.rb
+@@ -295,13 +295,15 @@ module SISL
+             end
+ 	    
+ 	    def pretty_print(pp)
+-		if empty?
++		if(empty?)
+ 		    pp.text "Curve is empty"
+ 		    pp.breakable		
+ 		else
+-                    pp.text "start_point,end_point=[#{start_point}, #{end_point}]"
++		    pp.text "dimensions=[#{start_point}, #{end_point}]"
+ 		    pp.breakable		
+-                    pp.text "start_param,end_param=[#{start_param}, #{end_param}]"
++		    pp.text "length=[#{curve_length}]"
++		    pp.breakable
++		    pp.text "params=[#{start_param}, #{end_param}]"
+ 		end
+ 	    end
+ 	    
+diff --git a/src/samples/DistanceImage.hpp b/src/samples/DistanceImage.hpp
+index f40dbae..bb68bff 100644
+--- a/src/samples/DistanceImage.hpp
++++ b/src/samples/DistanceImage.hpp
+@@ -5,7 +5,9 @@
+ #include <base/Eigen.hpp>
+ #include "Pointcloud.hpp"
+ #include <vector>
++#ifndef Q_MOC_RUN
+ #include <boost/math/special_functions/fpclassify.hpp>
++#endif
+ 
+ namespace base
+ {
+diff --git a/viz/CMakeLists.txt b/viz/CMakeLists.txt
+index 09e2f98..2079894 100644
+--- a/viz/CMakeLists.txt
++++ b/viz/CMakeLists.txt
+@@ -10,6 +10,7 @@ endif()
+ 
+ rock_vizkit_plugin(base-viz
+     PluginLoader.cpp Uncertainty.cpp Vizkit3DHelper.cpp
++    DistanceImageVisualization.cpp
+     MOC 
+         DistanceImageVisualization.cpp 
+         LaserScanVisualization.cpp 

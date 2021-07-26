@@ -36,9 +36,12 @@ version_control:
   commit: a862882d5ca2d38f09f48c56d5be869507c24cfe
 
 - base/types:
-  gmvgit: PERASPERA/MOSAR/ESROCOS/base-types
+  type: git
+  github: rock-core/base-types
   branch: master
-  #commit: 8f99ad0b6bc5d27d4e29dac9072c0b4f0d8dad63
+  commit: e0b86b0aeeb633f1ea091b9bbc841b6b0cb94bb8
+  patches: 
+   - [$AUTOPROJ_SOURCE_DIR/patches/base-types-esrocosv2.patch, 1]
 
 - base/orogen/std:
   github: rock-core/base-orogen-std
@@ -91,9 +94,12 @@ version_control:
   commit: 721e38ab2ce3f1f43cbe2d05ef99d7cd4e6ecfb7
 
 - gui/robot_model:
-  gmvgit: PERASPERA/MOSAR/ESROCOS/gui-robot_model
+  type: git
+  github: rock-gui/gui-robot_model
   branch: master
-  #commit: 9b0de0e249c252c1f079116217f85078235020cd
+  commit: 5d960fd92b8ce8eb2aaf8120439102c0b2ea23f8
+  patches: 
+   - [$AUTOPROJ_SOURCE_DIR/patches/gui-robot_model-esrocosv2.patch, 1]
 
 - gui/vizkit3d:
   github: rock-core/gui-vizkit3d

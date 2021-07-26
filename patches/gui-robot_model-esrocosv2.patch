@@ -1,0 +1,370 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8775ac7..2a1c90a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -17,6 +17,7 @@ endif()
+  
+ rock_standard_layout()
+  
+-install(PROGRAMS bin/rock-roboviz
+-    DESTINATION bin)
++# bin/rock-roboviz removed to remove package dependencies otherwise not needed in ESROCOS
++#install(PROGRAMS bin/rock-roboviz
++#    DESTINATION bin)
+     
+diff --git a/bin/rock-roboviz b/bin/rock-roboviz
+deleted file mode 100644
+index 6ad1229..0000000
+--- a/bin/rock-roboviz
++++ /dev/null
+@@ -1,267 +0,0 @@
+-#! /usr/bin/env ruby
+-
+-require 'vizkit'
+-require 'optparse'
+-
+-def try_to_get_task(task_name, retry_on_error=true)
+-    task = nil
+-    begin
+-        task = Orocos.name_service.get task_name
+-    rescue Exception => e
+-        if retry_on_error
+-            puts "Did not find task context '#{task_name}'. Will retry in a second."
+-            sleep(1)
+-            return try_to_get_task(task_name)
+-        else
+-            return nil
+-        end
+-    end
+-    return task
+-end
+-
+-control_tasks = Array.new
+-state_tasks = Array.new
+-use_test_gui = true
+-mode_optimize = false
+-simplify = nil
+-smooth = false
+-parallel = 1
+-hostname = nil
+-model_file_mode = 'auto'
+-options = OptionParser.new do |opt|
+-    opt.banner = <<-EOD
+-rock-roboviz [options] /path/to/model/file
+-  Opens a UI that allows to either display a model file (offline),
+-  or display the state of a model based on joint data from a port (with
+-  --joint-state-port)
+-
+-  If --joint-state-port is not given, a UI window is started to allow changing
+-  the joint values. Use --no-joint-gui to disable
+-
+-  See the Display Options section below for an option description
+-
+-rock-roboviz --optimize-meshes [options] FILES
+-  Create optimized osgb files from other mesh files in a way that the robot
+-  model visualization would load automatically. This speeds up loading
+-  significantly, and allows to do more expensive passes - such as simplification
+-  and smoothing.
+-
+-  See the Optimization Options section below for an option description
+-    EOD
+-    opt.separator "\nDisplay Options"
+-    opt.on '--urdf', 'load the given file as URDF' do
+-        model_file_mode = 'urdf'
+-    end
+-    opt.on '--sdf', 'load the given file as SDF' do
+-        model_file_mode = 'sdf'
+-    end
+-    opt.on '--no-test-gui', 'disable the test GUI if no task context has been given' do
+-        use_test_gui = false
+-    end
+-    opt.on '--host=HOSTNAME', String, 'the host we should contact to find RTT tasks' do |host|
+-        hostname = host
+-    end
+-    opt.on '--joint_control_port=TASK_CONTEXT_NAME:PORT_NAME', '-c=TASK_CONTEXT_NAME:PORT_NAME' , "Spawn a control UI connected to this port" do |val|
+-        *task_name, port_name = val.split(':')
+-        if task_name.empty?
+-            raise("Definition of command port must follow the pattern 'TASK_CONTEXT_NAME[:PORT_NAME]'. Example: --joint_command_port=my_task:the_port")
+-        end
+-        control_tasks << [task_name.join(":"), port_name]
+-    end
+-    opt.on '--joint_state_port=TASK_CONTEXT_NAME:PORT_NAME', '-s=TASK_CONTEXT_NAME:PORT_NAME' , "Use joint state port of task TASK_CONTEXT_NAME to read data from" do |val|
+-        *task_name, port_name = val.split(':')
+-        if task_name.empty?
+-            raise("Definition of command port must follow the pattern 'TASK_CONTEXT_NAME[:PORT_NAME]'. Example: --joint_command_port=my_task:the_port")
+-        end
+-        state_tasks << [task_name.join(":"), port_name]
+-    end
+-    opt.separator "\nOptimization Options"
+-    opt.on '--optimize-meshes' do
+-        mode_optimize = true
+-    end
+-    opt.on '--simplify[=VALUE]', Float, 'normalized simplification factor, 0.5 will produce a 50% reduced model. If no value is given, it defaults to the OSG default of 1' do |value|
+-        simplify = value || 0.5
+-    end
+-    opt.on '--smooth', 'whether the model should be smoothed (default is not)' do
+-        smooth = true
+-    end
+-    opt.on '--threads=N', Integer, 'how many parallel threads can be run to process the files' do |value|
+-        parallel = value
+-    end
+-    opt.on '--help', 'this help message' do
+-        puts opt
+-        exit 0
+-    end
+-end
+-
+-args = options.parse(ARGV)
+-
+-class ConversionFailed < RuntimeError; end
+-if mode_optimize
+-    queue = Queue.new
+-    env = Hash[
+-        'OSG_OPTIMIZER' => 'INDEX_MASH STATIC_OBJECT_DETECTION VERTEX_POSTTRANSFORM',
+-        'OSG_NOTIFY_LEVEL' => 'WARN'
+-    ]
+-    osgconv_args = []
+-    if smooth
+-        osgconv_args << '--smooth'
+-    end
+-    if simplify
+-        osgconv_args << "--simplify" << simplify.to_s
+-    end
+-    args.each { |file| queue << file }
+-    threads = (0...parallel).map do
+-        Thread.new do
+-            while !queue.empty?
+-                file = queue.pop
+-                if !system(env, "osgconv", *osgconv_args, file, "#{file}.osgb")
+-                    raise ConversionFailed, "conversion of #{file} failed"
+-                end
+-            end
+-            nil
+-        end
+-    end
+-    has_error = false
+-    threads.each do |t|
+-        begin t.value
+-        rescue ConversionFailed => e
+-            has_error = true
+-            STDERR.puts e.message
+-        end
+-    end
+-    if has_error
+-        exit 0
+-    else
+-        exit 1
+-    end
+-end
+-
+-model_file = args.shift
+-
+-if !model_file
+-    puts "missing model file argument"
+-    puts options
+-    exit 1
+-end
+-
+-if model_file_mode == 'auto'
+-    if model_file =~ /^model:\/\// || model_file.end_with?(".sdf")
+-        model_file_mode = 'sdf'
+-    end
+-end
+-
+-if model_file_mode == 'sdf'
+-    # Enable bundle support to resolve inter-model dependencies inside the SDF
+-    require 'rock/bundle'
+-    require 'sdf'
+-    Bundles.load
+-    Bundles.find_dirs('models', 'sdf', all: true, order: :specific_last).each do |path|
+-        SDF::XML.model_path << path
+-    end
+-else
+-    Orocos.load
+-end
+-
+-def discover_and_connect_to_port(task_name, port_name, options = Hash.new)
+-    filter  = options[:filter] || -> { true }
+-    handler = options[:handler]
+-
+-    task = Orocos::Async.proxy task_name
+-    if port_name
+-        handler.call(task.port(port_name))
+-    else
+-        task.on_reachable do
+-            #find joint state port
+-            matching_ports = task.ports.find_all(&filter)
+-            if matching_ports.size > 1
+-                puts "Multiple joint state producer ports. Don't know which to use, explicitly provide one"
+-                matching_ports.each { |p| puts p.name }
+-                exit 1
+-            end
+-            if matching_ports.empty?
+-                puts "No joint state producer port available on #{task_name}, provide one explicitely"
+-                exit 1
+-            end
+-
+-            handler.call(matching_ports.first)
+-        end
+-    end
+-    task
+-end
+-
+-live = (!state_tasks.empty? || !control_tasks.empty?)
+-needs_control_ui = (live && !control_tasks.empty?) || (!live && use_test_gui)
+-
+-view3d = Vizkit.vizkit3d_widget
+-vis_gui = Vizkit.default_loader.RobotVisualization
+-
+-main = Qt::Widget.new
+-layout = Qt::VBoxLayout.new(main)
+-layout.add_widget(view3d)
+-
+-if needs_control_ui
+-    ctrl_gui = Vizkit.default_loader.ControlUi
+-    override_vel_limits=0
+-    only_positive=true
+-    no_effort=true
+-    no_velocity=true
+-    ctrl_gui.configureUi(override_vel_limits, only_positive, no_effort, no_velocity)
+-    ctrl_gui.enabled = false
+-    layout.add_widget(ctrl_gui)
+-end
+-
+-if live
+-    task_states = Vizkit.default_loader.StateViewer
+-    layout.add_widget(task_states)
+-end
+-
+-if model_file_mode == 'sdf'
+-    sdf_string = SDF.to_xml(SDF::Root.load(model_file).each_model.first)
+-    vis_gui.loadFromString(sdf_string.dup, 'sdf')
+-    if ctrl_gui
+-        ctrl_gui.initFromString(sdf_string.dup, model_file_mode.dup)
+-    end
+-else
+-    vis_gui.loadFromFile(model_file.dup, model_file_mode.dup)
+-    if ctrl_gui
+-        ctrl_gui.initFromFile(model_file.dup, model_file_mode.dup)
+-    end
+-end
+-
+-if live
+-    if hostname
+-        Orocos::CORBA.name_service.ip = hostname
+-    end
+-    Orocos.initialize
+-
+-    state_tasks.each do | task_name, port_name | 
+-        task = discover_and_connect_to_port task_name, port_name,
+-            filter:  ->(port) { port.is_a?(Orocos::OutputPort) and p.type == Types::Base::Samples::Joints },
+-            handler: ->(port) { port.on_data { |sample| vis_gui.updateData(sample) } }
+-        task_states.add task
+-    end
+-    control_tasks.each do | task_name, port_name |
+-        task = discover_and_connect_to_port task_name, port_name,
+-            filter:  ->(port) { port.is_a?(Orocos::InputPort) and p.type == Types::Base::Samples::Joints },
+-            handler: ->(port) { ctrl_gui.connect(SIGNAL('sendSignal()')) { port.write(ctrl_gui.getJoints) { } } }
+-
+-        task.on_state_change do |new_state|
+-            ctrl_gui.enabled = (new_state == :RUNNING)
+-        end
+-        task_states.add task
+-    end
+-
+-elsif use_test_gui
+-    ctrl_gui.enabled = true
+-    ctrl_gui.connect(SIGNAL('sendSignal()')) do 
+-        sample = ctrl_gui.getJoints()
+-        vis_gui.updateData(sample)
+-    end
+-    layout.add_widget ctrl_gui
+-end
+-
+-main.show
+-Vizkit.exec
+-
+-
+diff --git a/manifest.xml b/manifest.xml
+index 7680c0a..c96cf0d 100644
+--- a/manifest.xml
++++ b/manifest.xml
+@@ -5,10 +5,16 @@
+   <maintainer>Malte Wirkus/malte.wirkus@dfki.de</maintainer>
+   <license>LGPLv2 or later</license>
+ 
+-  <depend package="gui/control_ui" />
++<!--
++    Dependencies on vizkit and control_ui are only for auxiliary and
++    test tools not needed in ESROCOS. They are removed to reduce the
++    package dependencies.
++-->
++
++<!--  <depend package="gui/control_ui" /> -->
+   <depend package="base/types" />
+   <depend package="control/kdl_parser" />
+   <depend package="control/urdfdom" />
+   <depend package="control/sdformat" />
+-  <depend package="gui/vizkit" />
++<!--  <depend package="gui/vizkit" /> -->
+ </package>
+diff --git a/scripts/test.rb b/scripts/test.rb
+deleted file mode 100644
+index 97940ed..0000000
+--- a/scripts/test.rb
++++ /dev/null
+@@ -1,37 +0,0 @@
+-require 'vizkit'
+-
+-view3d = Vizkit.vizkit3d_widget
+-
+-#model_file = File.join(Dir.pwd, 'test_data', 'spacebot_arm', 'spacebot_arm.urdf')
+-model_file = File.join(Dir.pwd, 'test_data', 'simple_arm', 'model.sdf')
+-#model_file = File.join(Dir.pwd, 'test_data', 'pioneer2dx', 'model.sdf')
+-#model_file = File.join(Dir.pwd, 'test_data', 'irobot_hand', 'model.sdf')
+-
+-view3d = Vizkit.vizkit3d_widget
+-
+-vis_gui = Vizkit.default_loader.RobotVisualization
+-vis_gui.modelFile = model_file.dup
+-vis_gui.jointsSize = 0.02
+-
+-override_vel_limits=0
+-only_positive=true
+-no_effort=true
+-no_velocity=true
+-
+-ctrl_gui = Vizkit.default_loader.ControlUi
+-ctrl_gui.configureUi(override_vel_limits, only_positive, no_effort, no_velocity)
+-#ctrl_gui.initFromURDF(model_file.dup)
+-ctrl_gui.initFromSDF(model_file.dup)
+-ctrl_gui.connect(SIGNAL('sendSignal()')) do 
+-    sample = ctrl_gui.getJoints()
+-    vis_gui.updateData(sample)
+-end
+-
+-main = Qt::Widget.new
+-layout = Qt::VBoxLayout.new(main)
+-layout.add_widget(view3d)
+-layout.add_widget(ctrl_gui)
+-main.show
+-
+-
+-Vizkit.exec
+\ No newline at end of file
+diff --git a/viz/RobotVisualization.cpp b/viz/RobotVisualization.cpp
+index 3fd9498..b666308 100644
+--- a/viz/RobotVisualization.cpp
++++ b/viz/RobotVisualization.cpp
+@@ -115,7 +115,10 @@ void RobotVisualization::loadFromFile(QString path, QString _format)
+     else
+     {
+         _modelFile = path;
+-        emit propertyChanged("modelFile");
++
++        // FIXME: don't emit signal, it triggers the reexecution of the method and
++        // causes a race condition if the file was yetnot fully loaded
++        //emit propertyChanged("modelFile");
+     }
+ 
+     // Now create a RBS visualization for each of the frames in the model
