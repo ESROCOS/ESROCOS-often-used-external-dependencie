@@ -36,12 +36,8 @@ version_control:
   commit: a862882d5ca2d38f09f48c56d5be869507c24cfe
 
 - base/types:
-  type: archive
-  url: https://spass-git-ext.gmv.com/PERASPERA/MOSAR/ESROCOS/base-types/-/archive/master/base-types-master.zip
-  update_cached_file: true
-  archive_dir: base-types-master
-  #gmvgit: PERASPERA/MOSAR/ESROCOS/base-types
-  #branch: master
+  gmvgit: PERASPERA/MOSAR/ESROCOS/base-types
+  branch: master
   #commit: 8f99ad0b6bc5d27d4e29dac9072c0b4f0d8dad63
 
 - base/orogen/std:
