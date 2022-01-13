@@ -1,8 +1,6 @@
 boost:
     debian: 
         default: libboost-all-dev
-    ubuntu:
-        '20.04": libboost-all-dev
 
 bundler: gem
 
