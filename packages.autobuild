@@ -62,6 +62,8 @@ end
 
 cmake_package 'gui/osgviz'
 
+cmake_package 'gui/osg_qt4'
+
 cmake_package 'gui/robot_model'
 
 cmake_package 'gui/vizkit3d' do |pkg|
