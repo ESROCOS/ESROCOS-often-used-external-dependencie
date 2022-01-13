@@ -1,0 +1,12 @@
+diff --git a/manifest.xml b/manifest.xml
+index 2c02a84..e92029e 100644
+--- a/manifest.xml
++++ b/manifest.xml
+@@ -8,6 +8,7 @@
+   <license>LGPLv2 or later</license>
+   <url>http://rock-robotics.org</url>
+ 
++   <depend package="g++" />
+   <depend package="orogen" />
+   <depend package="tools/orogen_metadata" />
+   <tags>stable</tags>

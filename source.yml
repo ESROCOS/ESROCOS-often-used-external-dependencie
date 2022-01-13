@@ -47,6 +47,8 @@ version_control:
   github: rock-core/base-orogen-std
   branch: master
   commit: ba7de811e440c5512623947af2db5e4d90ae687d
+  patches:
+    - [$AUTOPROJ_SOURCE_DIR/patches/base_orogen_std.patch, 1]
 
 - base/orogen/types:
   github: rock-core/base-orogen-types
