@@ -73,7 +73,7 @@ version_control:
   archive_dir: sdformat-4.0.0
   update_cached_file: false
   patches:
-    - $AUTOPROJ_SOURCE_DIR/patches/sdformat.patch
+    - [$AUTOPROJ_SOURCE_DIR/patches/sdformat.patch, 1]
 
 - control/urdfdom:
   github: ros/urdfdom
