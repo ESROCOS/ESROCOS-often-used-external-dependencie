@@ -43,7 +43,10 @@ end
 
 cmake_package 'control/kdl_parser'
 
-cmake_package 'control/sdformat'
+cmake_package 'control/sdformat' do |pkg|
+    pkg.depends_on 'tinyxml'
+    pkg.depends_on 'ignition-math'
+end
 
 cmake_package 'control/urdfdom' do |pkg|
     pkg.depends_on 'control/urdfdom_headers'

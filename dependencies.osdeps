@@ -135,3 +135,11 @@ yaml-cpp:
         
 rename:
     debian,ubuntu: rename
+
+tinyxml:
+    ubuntu:
+        '20.04': libtinyxml-dev
+
+ignition-math:
+    ubuntu:
+        '20.04': libignition-math4
