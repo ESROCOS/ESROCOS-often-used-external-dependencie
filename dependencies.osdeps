@@ -142,4 +142,6 @@ tinyxml:
 
 ignition-math:
     ubuntu:
-        '20.04': libignition-math4
+        '20.04': 
+            - libignition-math4
+            - libignition-math4-dev
