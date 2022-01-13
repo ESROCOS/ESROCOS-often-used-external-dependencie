@@ -145,3 +145,7 @@ ignition-math:
         '20.04': 
             - libignition-math4
             - libignition-math4-dev
+
+g++:
+    ubuntu:
+        '20.04': g++-10
