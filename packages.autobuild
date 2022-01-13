@@ -70,6 +70,7 @@ cmake_package 'gui/osg_qt4'
 cmake_package 'gui/robot_model'
 
 cmake_package 'gui/vizkit3d' do |pkg|
+    pkg.depends_on "gui/osg_qt4"
     pkg.define "OROCOS_TARGET", Autoproj.config.get('rtt_target')
     Autoproj.env_add_path 'OSG_FILE_PATH', File.join(pkg.prefix, "share", "vizkit" )
 
