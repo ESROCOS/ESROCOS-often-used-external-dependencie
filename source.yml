@@ -18,7 +18,7 @@ version_control:
 - base/cmake:
   github: rock-core/base-cmake
   branch: master
-  commit: 57c704c40f47450597a02e2a267bc79c47d0aa1e
+  commit: 3c751244fa4050ca54e4c1761d372e8d48560b2b
 
 - base/console_bridge:
   github: rock-core/base-console_bridge
@@ -104,12 +104,7 @@ version_control:
 - gui/vizkit3d:
   github: rock-core/gui-vizkit3d
   branch: master
-  commit: 339deb40219761781f1757d264f384860d142992
-
-- gui/osg_qt4:
-  github: rock-core/gui-osg_qt4
-  branch: master
-  commit: 18a2b63314dbaab5829aa5ca7f6edc6c391faa9b
+  commit: 405114bdb8f503e8e07515e32c787ebbd09487b6
 
 - orogen:
   github: orocos-toolchain/orogen
