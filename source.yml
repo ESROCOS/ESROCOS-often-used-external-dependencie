@@ -72,6 +72,8 @@ version_control:
   url: http://osrf-distributions.s3.amazonaws.com/sdformat/releases/sdformat-4.0.0.tar.bz2
   archive_dir: sdformat-4.0.0
   update_cached_file: false
+  patches:
+    - $AUTOPROJ_SOURCE_DIR/patches/sdformat.patch
 
 - control/urdfdom:
   github: ros/urdfdom

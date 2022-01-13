@@ -1,0 +1,40 @@
+diff -ruN sdformat/cmake/SearchForStuff.cmake new_sdformat/cmake/SearchForStuff.cmake
+--- sdformat/cmake/SearchForStuff.cmake	2016-01-13 01:25:32.000000000 +0000
++++ new_sdformat/cmake/SearchForStuff.cmake	2022-01-06 09:34:41.866012552 +0000
+@@ -131,7 +131,7 @@
+ ########################################
+ # Find ignition math
+ if (NOT DEFINED IGNITION-MATH_LIBRARY_DIRS AND NOT DEFINED IGNITION-MATH_INCLUDE_DIRS AND NOT DEFINED IGNITION-MATH_LIBRARIES)
+-  set(IGNITION-MATH_REQUIRED_MAJOR_VERSION 2)
++  set(IGNITION-MATH_REQUIRED_MAJOR_VERSION 4)
+   find_package(ignition-math${IGNITION-MATH_REQUIRED_MAJOR_VERSION} QUIET)
+   if (NOT ignition-math${IGNITION-MATH_REQUIRED_MAJOR_VERSION}_FOUND)
+     message(STATUS "Looking for ignition-math${IGNITION-MATH_REQUIRED_MAJOR_VERSION}-config.cmake - not found")
+diff -ruN sdformat/CMakeLists.txt new_sdformat/CMakeLists.txt
+--- sdformat/CMakeLists.txt	2016-01-13 01:25:32.000000000 +0000
++++ new_sdformat/CMakeLists.txt	2022-01-06 09:24:13.459970826 +0000
+@@ -186,9 +186,9 @@
+ # OS Specific initialization
+ if (UNIX)
+   sdf_setup_unix()
+-else (WIN32)
++elseif (WIN32)
+   sdf_setup_windows()
+-else (APPLE)
++elseif (APPLE)
+   sdf_setup_apple()
+ endif()
+ 
+diff -ruN sdformat/configure.bat new_sdformat/configure.bat
+--- sdformat/configure.bat	2016-01-13 01:25:32.000000000 +0000
++++ new_sdformat/configure.bat	2022-01-06 09:32:07.648943601 +0000
+@@ -6,7 +6,7 @@
+   -DBOOST_ROOT:STRING="%cd%\..\..\boost_1_56_0"^
+   -DBOOST_LIBRARYDIR:STRING="%cd%\..\..\boost_1_56_0\lib64-msvc-12.0"^
+   -DCMAKE_INSTALL_PREFIX="install/%build_type%"^
+-  -DIGNITION-MATH_INCLUDE_DIRS:STRING="%cd%\..\..\ign-math\build\install\%build_type%\include\ignition\math2"^
++  -DIGNITION-MATH_INCLUDE_DIRS:STRING="%cd%\..\..\ign-math\build\install\%build_type%\include\ignition\math4"^
+   -DIGNITION-MATH_LIBRARY_DIRS:STRING="%cd%\..\..\ign-math\build\install\%build_type%\lib"^
+-  -DIGNITION-MATH_LIBRARIES="ignition-math2"^
++  -DIGNITION-MATH_LIBRARIES="ignition-math4"^
+   -DCMAKE_BUILD_TYPE="%build_type%" ..
