@@ -2,7 +2,7 @@ boost:
     debian: 
         default: libboost-all-dev
     ubuntu:
-        '20.04': libboost-all-dev
+        '20.2,20.04': libboost-all-dev
 
 bundler: gem
 
@@ -79,6 +79,7 @@ pkg-config:
 
 qt4:
     # QMake is needed for the CMake macro for Qt4
+    linuxmint: ignore
     debian,ubuntu: [libqt4-dev, qt4-qmake]
     gentoo:
         - dev-qt/qtcore
@@ -89,6 +90,7 @@ qt4:
     arch,manjarolinux: qt4
 
 qt4-opengl:
+    linuxmint: ignore
     debian,ubuntu: libqt4-opengl-dev
     gentoo: dev-qt/qtopengl
     fedora,opensuse: qt-devel
@@ -138,14 +140,14 @@ rename:
 
 tinyxml:
     ubuntu:
-        '20.04': libtinyxml-dev
+        '20.2,20.04': libtinyxml-dev
 
 ignition-math:
     ubuntu:
-        '20.04': 
+        '20.2,20.04': 
             - libignition-math4
             - libignition-math4-dev
 
 g++:
     ubuntu:
-        '20.04': g++-10
+        '20.2,20.04': g++-10
